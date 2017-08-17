@@ -23,3 +23,5 @@ sigmod函数，就是接近时变化最快，远离是变化比较慢。下面�
 ![image](https://github.com/chenglu66/lr/blob/master/123.png)
 之所以随机梯度下降法优于梯度下降法就是我可以在越接近真值步长越小。因为越靠近越要谨慎。
 传说中牛顿下降法在收敛速度上要优于普通的梯度下降法，原因在于一个近视是一阶近似，一个是二阶近似。
+FBGS的优化曲线：
+![image](https://github.com/chenglu66/lr/blob/master/figure_1-3.png)
