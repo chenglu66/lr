@@ -31,4 +31,4 @@ FBGS的优化曲线：迭代次数仅为100次，而上面最优的的随机梯�
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-4.png)
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-5.png)
 拟牛顿法在数据仅有100维时意义不大，所以这里用个优化算法来表示所有。
-
+![image](https://github.com/chenglu66/lr/blob/master/1234.jpg)
