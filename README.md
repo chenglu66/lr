@@ -15,12 +15,16 @@ sigmod函数，就是接近时变化最快，远离是变化比较慢。下面�
 这里我感觉这并不是凸函数，所以想办法变成凸的，-log函数就是凸的，而里面的函数又是单调，所以下面就是优化的问题，梯度下降法，。
 随机梯度下降法结果：
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-1.png)
+
 批量梯度下降法结果：
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-2.png)
+
 一般随机梯度下降法结果：
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-3.png)
+
 从图中可以看出是算法没收敛，可以看到w的曲线因此加大迭代次数到9000可以得到，
 ![image](https://github.com/chenglu66/lr/blob/master/123.png)
+
 之所以随机梯度下降法优于梯度下降法就是我可以在越接近真值步长越小。因为越靠近越要谨慎。
 传说中牛顿下降法在收敛速度上要优于普通的梯度下降法，原因在于一个近视是一阶近似，一个是二阶近似。
 FBGS的优化曲线：迭代次数仅为100次，而上面最优的的随机梯度也要4000次
