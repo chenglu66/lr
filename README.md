@@ -13,5 +13,9 @@ sigmod函数，就是接近时变化最快，远离是变化比较慢。下面�
 因为是分类问题，前面的感知器用函数间隔，那么我就要确保
 我要的只要是分类正确的就是增大的，这样去求最大值就行。就是都满足了，这样最大释然函数也出来了（p）**y（1-p）**（1-y）
 下面就是优化的问题，梯度下降法，这里我感觉这并不是凸函数，所以优化时要注意。
-梯度下降法结果：
+随机梯度下降法结果：
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-1.png)
+批量梯度下降法结果：
+![image](https://github.com/chenglu66/lr/blob/master/figure_1-2.png)
+一般随机梯度下降法结果：
+![image](https://github.com/chenglu66/lr/blob/master/figure_1-3.png)
