@@ -19,7 +19,7 @@ def loadDataSet():
             dataMat.append([1.0, float(lineArr[0]), float(lineArr[1])])
             labelMat.append(int(lineArr[2]))
         fr.close()
-        return dataMat,labelMat
+        return mat(dataMat),mat(labelMat)
 
 def function(x):
     return x**2
@@ -34,8 +34,8 @@ def function_deriv(g):
     
     h = sigmoid(dataMatrix*g) #matrix mult
     error = (labelMat - h)#vector subtraction
-    g=dataMatrix.T*error#matrix mult
-    return g
+    l=dataMatrix.T*error#matrix mult
+    return l
 
 #Identity Matrix
 I = array( [ [1,0,0],
@@ -51,6 +51,7 @@ B_inv = B
 def plotBestFit(weights):
     import matplotlib.pyplot as plt
     dataMat,labelMat=loadDataSet()
+    labelMat=labelMat.tolist()[0]
     dataArr = array(dataMat)
     n = shape(dataArr)[0] 
     xcord1 = []; ycord1 = []
@@ -65,46 +66,47 @@ def plotBestFit(weights):
     ax.scatter(xcord1, ycord1, s=30, c='red', marker='s')
     ax.scatter(xcord2, ycord2, s=30, c='green')
     x = arange(20, 120, 10)
-    y = (-weights[0]-weights[1]*x)/weights[2]+120
+    y = (-weights[0]-weights[1]*x)/weights[2]
     y=y.tolist()
     ax.plot(x, y[0])
     plt.xlabel('X1'); plt.ylabel('X2');
     plt.show()
-x_k = array([[1],[1],[1]])
-for iterations in range(100):
-    print ("Iteration ", iterations, ": ")
-    #Obtain a direction p_k by solving B_k*p_k = -function_deriv(x_k)
-    l=function_deriv(x_k)
-    p_k = -B_inv.dot(l)
-    #Perform line search to find acceptable stepsize alpha_k such that x_k+1 = x_k + alpha_k*p_k
-    #-------- "min s |--> f( x_0 + s*p_0)"
-    #--------  --> Newton(once)
-    #------------- s_n+1 = s_n - g(s_n)/g'(s_n)
-    #------------- s_0 = 0 (initial s_0 condition, could be anything)
-    g = -function_deriv(x_k)
-    print ("g", g)
-    #Calculate step size alpha
-    
-    alpha_k = 200/(iterations+1)
-    print ("alpha_k", alpha_k)
-    #Set s_k = alpha_k*p_k
-    s_k = alpha_k*p_k.T
-    print ("s_k", s_k)
-    #Set x_k+1 = x_k + alpha_k*p_k
-    x_k1 = x_k-alpha_k*p_k
-    print ("x_k" ,x_k,"x_k1", x_k1)
-    #Set y_k = f'(x_k+1) - f'(x_k)
-    print(function_deriv(x_k1))
-    y_k = function_deriv(x_k1) - g
-    print ("y_k", y_k)
-    #Calculate B_k+1
-    #B_k1 = B + ((y_k.dot(y_k.T))/(y_k.T.dot(s_k))) - ((B.dot(s_k.dot(s_k.T.dot(B))))/(s_k.T.dot(B.dot(s_k))))
-    #Set new x_k
-    x_k = x_k1
-    #Compute new B_k inverse
-    a = I - ((s_k.T.dot(y_k.T))/(y_k.T.dot(s_k.T)))
-    b = I - ((y_k.dot(s_k))/(y_k.T.dot(s_k.T)))
-    B_inv = a.dot(B_inv).dot(b) + ((s_k.T.dot(s_k))/(y_k.T.dot(s_k.T)))
-    #B = B_k1
-    print( "-------------------------------")
-plotBestFit(x_k1)
+
+
+def BFGS(x,y, iter):#BFGS拟牛顿法
+    n = shape(x)[1]
+    theta=np.ones((n,1))
+    y=np.mat(y).T
+    Bk=np.eye(n,n)
+    grad_last = np.dot(x.T,sigmoid(np.dot(x,theta))-y)
+    cost=[]
+    for it in range(iter):
+        pk = -1 * np.linalg.solve(Bk, grad_last)
+        rate=alphA(x,y,theta,pk)
+        theta = theta + rate * pk
+        grad= np.dot(x.T,sigmoid(np.dot(x,theta))-y)
+        delta_k = rate * pk
+        y_k = (grad - grad_last)
+        Pk = y_k.dot(y_k.T) / (y_k.T.dot(delta_k))
+        Qk= Bk.dot(delta_k).dot(delta_k.T).dot(Bk) / (delta_k.T.dot(Bk).dot(delta_k)) * (-1)
+        Bk += Pk + Qk
+        grad_last = grad
+        cost.append(np.sum(grad_last))
+    return theta,cost
+
+def alphA(x,y,theta,pk): #选取前20次迭代cost最小的alpha
+    c=float("inf")
+    t=theta
+    for k in range(1,2000):
+            a=1.0/k**2
+            theta = t + a * pk
+            f= np.sum(np.dot(x.T,sigmoid(np.dot(x,theta))-y))
+            if abs(f)>c:
+                break
+            c=abs(f)
+            alpha=a
+    return alpha
+x,y=loadDataSet()
+x1,y1=BFGS(x,y, iter=100)
+print(x1)
+plotBestFit(x1)
