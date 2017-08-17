@@ -35,7 +35,6 @@ def function_deriv(g):
     h = sigmoid(dataMatrix*g) #matrix mult
     error = (labelMat - h)#vector subtraction
     g=dataMatrix.T*error#matrix mult
-    fx=dot(dataMatrix,g)
     return g
 
 #Identity Matrix
@@ -49,29 +48,50 @@ B = I
 B_inv = B
 
 #Pick initial point x_0
+def plotBestFit(weights):
+    import matplotlib.pyplot as plt
+    dataMat,labelMat=loadDataSet()
+    dataArr = array(dataMat)
+    n = shape(dataArr)[0] 
+    xcord1 = []; ycord1 = []
+    xcord2 = []; ycord2 = []
+    for i in range(n):
+        if int(labelMat[i])== 1:
+            xcord1.append(dataArr[i,1]); ycord1.append(dataArr[i,2])
+        else:
+            xcord2.append(dataArr[i,1]); ycord2.append(dataArr[i,2])
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(xcord1, ycord1, s=30, c='red', marker='s')
+    ax.scatter(xcord2, ycord2, s=30, c='green')
+    x = arange(20, 120, 10)
+    y = (-weights[0]-weights[1]*x)/weights[2]+120
+    y=y.tolist()
+    ax.plot(x, y[0])
+    plt.xlabel('X1'); plt.ylabel('X2');
+    plt.show()
 x_k = array([[1],[1],[1]])
-for iterations in range(20):
+for iterations in range(100):
     print ("Iteration ", iterations, ": ")
     #Obtain a direction p_k by solving B_k*p_k = -function_deriv(x_k)
     l=function_deriv(x_k)
-    print(l,B_inv)
-    p_k =  -B_inv.dot(l)
+    p_k = -B_inv.dot(l)
     #Perform line search to find acceptable stepsize alpha_k such that x_k+1 = x_k + alpha_k*p_k
     #-------- "min s |--> f( x_0 + s*p_0)"
     #--------  --> Newton(once)
     #------------- s_n+1 = s_n - g(s_n)/g'(s_n)
     #------------- s_0 = 0 (initial s_0 condition, could be anything)
-    g = function_deriv(x_k)
+    g = -function_deriv(x_k)
     print ("g", g)
     #Calculate step size alpha
     
-    alpha_k = -20
+    alpha_k = 200/(iterations+1)
     print ("alpha_k", alpha_k)
     #Set s_k = alpha_k*p_k
-    s_k = -alpha_k*p_k.T
+    s_k = alpha_k*p_k.T
     print ("s_k", s_k)
     #Set x_k+1 = x_k + alpha_k*p_k
-    x_k1 = x_k - alpha_k*p_k
+    x_k1 = x_k-alpha_k*p_k
     print ("x_k" ,x_k,"x_k1", x_k1)
     #Set y_k = f'(x_k+1) - f'(x_k)
     print(function_deriv(x_k1))
@@ -87,3 +107,4 @@ for iterations in range(20):
     B_inv = a.dot(B_inv).dot(b) + ((s_k.T.dot(s_k))/(y_k.T.dot(s_k.T)))
     #B = B_k1
     print( "-------------------------------")
+plotBestFit(x_k1)
