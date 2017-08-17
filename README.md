@@ -29,3 +29,4 @@ sigmod函数，就是接近时变化最快，远离是变化比较慢。下面�
 传说中牛顿下降法在收敛速度上要优于普通的梯度下降法，原因在于一个近视是一阶近似，一个是二阶近似。
 FBGS的优化曲线：迭代次数仅为100次，而上面最优的的随机梯度也要4000次
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-4.png)
+![image](https://github.com/chenglu66/lr/blob/master/figure_1-5.png)
