@@ -30,4 +30,5 @@ sigmod函数，就是接近时变化最快，远离是变化比较慢。下面�
 FBGS的优化曲线：迭代次数仅为100次，而上面最优的的随机梯度也要4000次，拟牛顿下降法的步长也比较重要，所以选择的时候若是发散，不妨试试更小的区间
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-4.png)
 ![image](https://github.com/chenglu66/lr/blob/master/figure_1-5.png)
+拟牛顿法在数据仅有100维时意义不大，所以这里用个优化算法来表示所有。
 
